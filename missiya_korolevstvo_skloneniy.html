@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Миссия: Спаси королевство склонений!</title>
+<style>
+:root{--ink:#25304a;--purple:#6655d9;--pink:#ff6f9f;--gold:#ffc857;--mint:#62d6b2;--sky:#79c8ff}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Trebuchet MS",Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#e9f4ff,#f8edff 55%,#fff4df);min-height:100vh}
+.wrap{max-width:1080px;margin:auto;padding:20px}
+.hero{position:relative;overflow:hidden;border-radius:28px;padding:28px;color:white;background:linear-gradient(120deg,#4b54c8,#9c5bd5 65%,#ef78ad);box-shadow:0 14px 35px #5545a533}
+.hero:after{content:"🏰";position:absolute;right:30px;top:18px;font-size:100px;opacity:.23}
+.eyebrow{font-weight:800;letter-spacing:2px;font-size:12px;text-transform:uppercase;opacity:.9}
+h1{font-size:clamp(30px,5vw,48px);margin:10px 0}
+.hero p{max-width:690px;line-height:1.5;font-size:17px}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+.stat{background:#ffffff25;border:1px solid #ffffff45;padding:9px 14px;border-radius:14px;font-weight:800}
+.panel{background:#ffffffdc;border:1px solid #fff;border-radius:24px;padding:22px;margin:18px 0;box-shadow:0 8px 25px #3c367014}
+h2{margin:0 0 12px;font-size:25px}
+.intro-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px}
+.guide{background:#f4f1ff;border-radius:18px;padding:18px;line-height:1.55}
+.guide strong{color:#5948c5}
+.mascot{display:flex;align-items:center;gap:14px;background:#fff4dc;border-radius:18px;padding:16px}
+.mascot .face{font-size:56px}
+.mascot p{margin:0;line-height:1.45}
+.map{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.tower{border:2px solid transparent;border-radius:20px;padding:18px;text-align:center;cursor:pointer;transition:.2s;min-height:150px}
+.tower:hover{transform:translateY(-4px);box-shadow:0 10px 20px #3332}
+.tower .emoji{font-size:44px}.tower h3{margin:7px 0}.tower p{margin:0;font-size:13px}
+.t1{background:#e9f8ff;border-color:#9edcff}.t2{background:#fff1e4;border-color:#ffd09a}.t3{background:#f7eaff;border-color:#d6b0f2}
+button{border:0;border-radius:14px;padding:13px 18px;font-weight:800;font-size:15px;cursor:pointer;color:white;background:var(--purple);box-shadow:0 5px 0 #4939a8;transition:.12s}
+button:hover{filter:brightness(1.07);transform:translateY(-1px)}
+button:active{transform:translateY(3px);box-shadow:0 2px 0 #4939a8}
+button.secondary{background:#eef0ff;color:#5145a8;box-shadow:none}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.gamehead{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.progress{height:12px;background:#eceafa;border-radius:20px;overflow:hidden;margin:14px 0}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#62d6b2,#78c7ff);transition:.3s}
+.question{font-size:clamp(23px,4vw,32px);font-weight:900;text-align:center;margin:22px 0 8px}
+.hint{text-align:center;color:#69718b;margin:0 0 18px}
+.answers{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.answer{background:#f3f1ff;color:#3e376f;box-shadow:none;border:2px solid #ded8ff;min-height:90px;font-size:18px}
+.answer:hover{background:#e8e3ff}
+.feedback{padding:14px;border-radius:15px;margin-top:16px;font-weight:800;display:none}
+.feedback.good{display:block;background:#e5fbf2;color:#167b5a}
+.feedback.bad{display:block;background:#fff0ed;color:#b74d40}
+.hidden{display:none!important}
+.badge{display:inline-block;border-radius:99px;padding:6px 11px;background:#fff0c9;color:#805600;font-weight:900;font-size:12px}
+.footer{text-align:center;color:#737c98;font-size:13px;padding:10px}
+@media(max-width:700px){.intro-grid{grid-template-columns:1fr}.map{grid-template-columns:1fr}.answers{grid-template-columns:1fr}.hero:after{font-size:65px;right:12px}.wrap{padding:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+ <div class="eyebrow">Интерактивная игра · Русский язык · 5 класс</div>
+ <h1>⚔️ Миссия: Спаси королевство склонений!</h1>
+ <p>Робот Перепуткин перемешал все слова! Стань хранителем грамматики: определи склонение существительных и верни слова в правильные башни.</p>
+ <div class="stats"><div class="stat">⭐ Очки: <span id="score">0</span></div><div class="stat">🗝️ Кристаллы: <span id="crystals">0</span>/9</div><div class="stat">🏆 Звание: <span id="rank">Новичок</span></div></div>
+</header>
+
+<section class="panel intro-grid" id="startPanel">
+ <div>
+  <h2>📜 Секретная подсказка</h2>
+  <div class="guide">
+   <p><strong>I склонение:</strong> женский и мужской род, окончания <b>-а, -я</b>. Например: мама, земля, дядя.</p>
+   <p><strong>II склонение:</strong> мужской род с нулевым окончанием или на <b>-й, -ь</b>; средний род на <b>-о, -е</b>. Например: стол, конь, окно, море.</p>
+   <p><strong>III склонение:</strong> женский род с мягким знаком на конце. Например: ночь, мышь, тетрадь.</p>
+   <p><b>Запомни:</b> сначала определи род и начальную форму слова (именительный падеж, единственное число), затем найди окончание!</p>
+  </div>
+ </div>
+ <div class="mascot"><div class="face">🤖</div><p><b>Привет, герой!</b><br>Я робот-помощник Букварик. Выбирай правильную башню для каждого слова. За верные ответы получишь кристаллы! Ошибки не страшны — подсказка поможет.</p></div>
+</section>
+
+<section class="panel" id="mapPanel">
+ <h2>🗺️ Карта королевства</h2>
+ <p>Впереди три башни. Пройди испытания и собери все кристаллы!</p>
+ <div class="map">
+  <div class="tower t1"><div class="emoji">🏡</div><h3>Башня I склонения</h3><p>Слова на -а, -я</p></div>
+  <div class="tower t2"><div class="emoji">🏯</div><h3>Башня II склонения</h3><p>Мужской и средний род</p></div>
+  <div class="tower t3"><div class="emoji">🗼</div><h3>Башня III склонения</h3><p>Женский род на -ь</p></div>
+ </div>
+ <div class="actions"><button id="startBtn">🚀 Начать миссию</button></div>
+</section>
+
+<section class="panel hidden" id="gamePanel">
+ <div class="gamehead"><span class="badge" id="stage">Испытание 1 из 9</span><b>Кристаллы: <span id="miniCrystals">0</span>/9</b></div>
+ <div class="progress"><span id="bar"></span></div>
+ <div class="question" id="word">Мама</div>
+ <p class="hint" id="prompt">К какой башне отправим это слово?</p>
+ <div class="answers">
+  <button class="answer" data-answer="1">🏡<br>I склонение</button>
+  <button class="answer" data-answer="2">🏯<br>II склонение</button>
+  <button class="answer" data-answer="3">🗼<br>III склонение</button>
+ </div>
+ <div class="feedback" id="feedback"></div>
+ <div class="actions"><button id="nextBtn" class="hidden">Следующее слово ➜</button><button id="restartBtn" class="secondary">Начать заново</button></div>
+</section>
+
+<section class="panel hidden" id="endPanel">
+ <div style="text-align:center">
+  <div style="font-size:70px" id="endEmoji">👑</div>
+  <h2 id="endTitle">Королевство спасено!</h2>
+  <p id="endText">Ты справился с миссией!</p>
+  <div style="font-size:25px;font-weight:900;color:#6554d7;margin:14px">⭐ <span id="finalScore">0</span> очков</div>
+  <p id="endTip"></p>
+  <button id="againBtn">🔁 Сыграть ещё раз</button>
+ </div>
+</section>
+<div class="footer">Учись играя! Каждый правильно определённый тип склонения — шаг к званию Хранителя слов ✨</div>
+</div>
+<script>
+const tasks=[
+ {w:"Мама",a:1,why:"«Мама» — женский род, окончание -а. Это I склонение."},
+ {w:"Стол",a:2,why:"«Стол» — мужской род, нулевое окончание. Это II склонение."},
+ {w:"Ночь",a:3,why:"«Ночь» — женский род, на конце мягкий знак. Это III склонение."},
+ {w:"Земля",a:1,why:"«Земля» — женский род, окончание -я. Это I склонение."},
+ {w:"Окно",a:2,why:"«Окно» — средний род, окончание -о. Это II склонение."},
+ {w:"Тетрадь",a:3,why:"«Тетрадь» — женский род, на конце мягкий знак. Это III склонение."},
+ {w:"Дядя",a:1,why:"«Дядя» — мужской род, окончание -я. Это I склонение."},
+ {w:"Море",a:2,why:"«Море» — средний род, окончание -е. Это II склонение."},
+ {w:"Мышь",a:3,why:"«Мышь» — женский род, на конце мягкий знак. Это III склонение."}
+];
+let index=0,score=0,crystals=0,locked=false;
+const $=id=>document.getElementById(id);
+function rank(){return score>=80?"Хранитель слов":score>=50?"Защитник грамматики":score>=20?"Ученик-мастер":"Новичок"}
+function updateStats(){$("score").textContent=score;$("crystals").textContent=crystals;$("miniCrystals").textContent=crystals;$("rank").textContent=rank()}
+function start(){index=0;score=0;crystals=0;locked=false;updateStats();$("startPanel").classList.add("hidden");$("mapPanel").classList.add("hidden");$("endPanel").classList.add("hidden");$("gamePanel").classList.remove("hidden");showTask()}
+function showTask(){locked=false;let t=tasks[index];$("word").textContent="«"+t.w+"»";$("stage").textContent=`Испытание ${index+1} из ${tasks.length}`;$("bar").style.width=(index/tasks.length*100)+"%";$("feedback").className="feedback";$("feedback").textContent="";$("nextBtn").classList.add("hidden");document.querySelectorAll(".answer").forEach(b=>{b.disabled=false;b.style.borderColor="";b.style.background=""})}
+document.querySelectorAll(".answer").forEach(b=>b.addEventListener("click",()=>{if(locked)return;locked=true;let t=tasks[index],chosen=Number(b.dataset.answer),fb=$("feedback");document.querySelectorAll(".answer").forEach(x=>x.disabled=true);if(chosen===t.a){score+=10;crystals++;fb.className="feedback good";fb.textContent="🎉 Верно! +10 очков и кристалл. "+t.why;b.style.borderColor="#52c99b";b.style.background="#e5fbf2"}else{fb.className="feedback bad";fb.textContent="Почти! Не сдавайся. "+t.why;b.style.borderColor="#ff9a8c";b.style.background="#fff0ed"}updateStats();$("nextBtn").textContent=index===tasks.length-1?"🏁 Завершить миссию":"Следующее слово ➜";$("nextBtn").classList.remove("hidden")}));
+$("nextBtn").addEventListener("click",()=>{index++;if(index>=tasks.length)finish();else showTask()});
+function finish(){$("gamePanel").classList.add("hidden");$("endPanel").classList.remove("hidden");$("bar").style.width="100%";$("finalScore").textContent=score;if(crystals===9){$("endEmoji").textContent="👑";$("endTitle").textContent="Королевство спасено!";$("endText").textContent="Великолепно! Ты правильно распределил все слова."}else if(crystals>=6){$("endEmoji").textContent="🏆";$("endTitle").textContent="Миссия почти идеальна!";$("endText").textContent="Ты отлично справился. Ещё немного практики — и станешь мастером!"}else{$("endEmoji").textContent="💪";$("endTitle").textContent="Храбрый защитник!";$("endText").textContent="Ты прошёл испытание. Повтори подсказку и попробуй ещё раз!"}$("endTip").textContent="Собрано кристаллов: "+crystals+" из 9. Твоё звание: "+rank()+"."}
+$("startBtn").addEventListener("click",start);$("restartBtn").addEventListener("click",start);$("againBtn").addEventListener("click",start);
+</script>
+</body>
+</html>
